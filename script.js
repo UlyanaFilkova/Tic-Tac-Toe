@@ -4,11 +4,19 @@ function createGameboard() {
     const pcPlayer = createPCPlayer(userPlayer);
     let currentPlayer = userPlayer.sign === 'X' ? userPlayer : pcPlayer;
 
-    function makeMove(index) {
-        if (this.checkCell(index) === false) {
-            return false;
+    function doMove() {
+        let index;
+        do {
+            index = (this.currentPlayer === this.userPlayer) ?
+                this.userPlayer.getPlayerChoice() :
+                this.pcPlayer.getPCChoice();
+            
         }
+        while (this.checkCell(index) === false);
         board[index] = this.currentPlayer.sign;
+        // this.tryMove(index);
+
+        
         let winnerSymbol = this.checkWinner();
         if (winnerSymbol === false) {
             this.swapUser();
@@ -16,6 +24,17 @@ function createGameboard() {
         else {
             this.endGame(winnerSymbol);
         }
+
+        
+    }
+
+
+    function tryMove(index) {
+        // if (this.checkCell(index) === false) {
+        //     return false;
+        // }
+        board[index] = this.currentPlayer.sign;
+        
     }
 
     function checkWinner() {
@@ -62,7 +81,8 @@ function createGameboard() {
         userPlayer,
         pcPlayer,
         currentPlayer,
-        makeMove,
+        doMove,
+        tryMove,
         checkWinner,
         swapUser,
         endGame,
@@ -73,9 +93,15 @@ function createGameboard() {
 function createPlayer() {
     const name = 'User';//getUserName() || 'User';
     const sign = 'X';//getUserSign() || 'X';
+    function getPlayerChoice() {
+        // return prompt('Enter a number between 1 and 9:');
+        return Math.floor(Math.random() * 9);
+    }
+
     return ({
         name,
-        sign
+        sign,
+        getPlayerChoice
     });
 
 }
@@ -83,28 +109,32 @@ function createPlayer() {
 function createPCPlayer(userPlayer) {
     const name = 'Computer';
     const sign = userPlayer.sign === 'X' ? 'O' : 'X';
+    function getPCChoice() {
+        return Math.floor(Math.random() * 9);
+    }
     return {
         name,
-        sign
+        sign,
+        getPCChoice
     };
 
-}
-
-function generatePCMove() {
-    return Math.floor(Math.random() * 9) + 1;
-}
-
-function getUserMove() {
-    return prompt('Enter a number between 1 and 9:');
 }
 
 
 const gameboard = createGameboard();
 
-gameboard.makeMove(0);
-gameboard.makeMove(1);
-gameboard.makeMove(3);
-gameboard.makeMove(4);
-gameboard.makeMove(6);
-gameboard.makeMove(5);
+
+gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
+
+// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
+// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
+// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
+// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
+// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
+// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
 console.log(gameboard.board);
