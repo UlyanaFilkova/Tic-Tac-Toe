@@ -1,36 +1,27 @@
-const gameboard = (function createGameboard() {
+function createGameboard() {
     const board = Array(9).fill(null);
-    const userPlayer = createPlayer();
-    const pcPlayer = createPCPlayer(userPlayer);
-    let currentPlayer = userPlayer.sign === 'X' ? userPlayer : pcPlayer;
+    let userPlayer;
+    let pcPlayer;
+    let currentPlayer; //= userPlayer.sign === 'X' ? userPlayer : pcPlayer;
 
-    function doMove() {
-        let index;
-        // подбираем ячейку, которая еще не занята
-        do {
-            index = (this.currentPlayer === this.userPlayer) ?
-                this.userPlayer.getPlayerChoice() :
-                this.pcPlayer.getPCChoice();
-        }
-        while (this.checkCell(index) === false);
+    function doMove(index) {
+        // let index;
+        // // подбираем ячейку, которая еще не занята
+        // do {
+        //     index = (this.currentPlayer === this.userPlayer) ?
+        //         this.userPlayer.getPlayerChoice() :
+        //         this.pcPlayer.getPCChoice();
+        // }
+        // while (this.checkCell(index) === false);
 
         board[index] = this.currentPlayer.sign;
 
-        if (this.checkEndGame() === false) {
-            this.swapUser();
-        }
-        else {
-            this.endGame();
-        }
+
 
     }
 
     function checkEndGame() {
-        // let winnerSymbol = this.checkWinner();
-        // if (winnerSymbol === false) {
-        //     this.swapUser();
-        // }
-        if (this.checkWinner() !== false || this.board.includes(null) === false ) {
+        if (this.checkWinner() !== false || this.board.includes(null) === false) {
             return true;
         }
         return false;
@@ -73,7 +64,7 @@ const gameboard = (function createGameboard() {
         if (winnerSymbol !== false) {
             message = winnerSymbol === this.userPlayer.sign ? 'You won!' : 'You lost!';
         }
-        else{
+        else {
             message = 'Draw!';
         }
         console.log(message);
@@ -91,15 +82,15 @@ const gameboard = (function createGameboard() {
         endGame,
         checkCell
     };
-})();
+}
 
-function createPlayer() {
-    const name = 'User';//getUserName() || 'User';
-    const sign = 'X';//getUserSign() || 'X';
-    // let i = 0;
+
+function createPlayer(nameParam, signParam) {
+    const name = nameParam;
+    const sign = signParam;
+
     function getPlayerChoice() {
         return Math.floor(Math.random() * 9);
-        // return i++;
     }
 
     return ({
@@ -110,13 +101,13 @@ function createPlayer() {
 
 }
 
+
 function createPCPlayer(userPlayer) {
     const name = 'Computer';
     const sign = userPlayer.sign === 'X' ? 'O' : 'X';
-    // let i = 3;
+
     function getPCChoice() {
         return Math.floor(Math.random() * 9);
-        // return i++
     }
     return {
         name,
@@ -127,18 +118,14 @@ function createPCPlayer(userPlayer) {
 }
 
 
-// const gameboard = createGameboard();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
+// gameboard.doMove();
 
-
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-gameboard.doMove();
-
-
-console.log(gameboard.board);
+// console.log(gameboard.board);

@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
-</body>
-</html>
 
+<body>
+    <main class="main">
+
+        <h1 class="title">Tic Tac Toe</h1>
+
+        <section class="stat">
+            <span id="userName"></span> VS Компьютер
+        </section>
+        <section class="gameboard">
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+            <div class="cell disabled" id="cell"></div>
+        </section>
+        <!-- <section class="display announcer hide"></section> -->
+        <section class="controls">
+            <button id="newGame">Новая игра</button>
+            <dialog id="settingsDialog">
+                <h2>Новая игра</h2>
+                <label for="playerName">Ваше имя:</label>
+                <input type="text" id="playerName" value="Игрок">
+                <input type="radio" id="playerSignX" name="playerSign" value="X">Крестик
+                <input type="radio" id="playerSignO" name="playerSign" value="O">Нолик
+
+                <button id="confirmSettings">Подтвердить</button>
+                <button id="cancelSettings">Отмена</button>
+            </dialog>
+        </section>
+    </main>
+    <script src="logic.js"></script>
+    <script src="DOM.js"></script>
+
+</body>
+
+</html>
