@@ -1,4 +1,4 @@
-function createGameboard() {
+const gameboard = (function createGameboard() {
     const board = Array(9).fill(null);
     const userPlayer = createPlayer();
     const pcPlayer = createPCPlayer(userPlayer);
@@ -6,35 +6,38 @@ function createGameboard() {
 
     function doMove() {
         let index;
+        // подбираем ячейку, которая еще не занята
         do {
             index = (this.currentPlayer === this.userPlayer) ?
                 this.userPlayer.getPlayerChoice() :
                 this.pcPlayer.getPCChoice();
-            
         }
         while (this.checkCell(index) === false);
-        board[index] = this.currentPlayer.sign;
-        // this.tryMove(index);
 
-        
-        let winnerSymbol = this.checkWinner();
-        if (winnerSymbol === false) {
+        board[index] = this.currentPlayer.sign;
+
+        if (this.checkEndGame() === false) {
             this.swapUser();
         }
         else {
-            this.endGame(winnerSymbol);
+            this.endGame();
         }
 
-        
     }
 
-
-    function tryMove(index) {
-        // if (this.checkCell(index) === false) {
-        //     return false;
+    function checkEndGame() {
+        // let winnerSymbol = this.checkWinner();
+        // if (winnerSymbol === false) {
+        //     this.swapUser();
         // }
-        board[index] = this.currentPlayer.sign;
-        
+        if (this.checkWinner() !== false || this.board.includes(null) === false ) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkCell(index) {
+        return this.board[index] === null;
     }
 
     function checkWinner() {
@@ -64,16 +67,16 @@ function createGameboard() {
         this.currentPlayer = this.currentPlayer === this.userPlayer ? this.pcPlayer : this.userPlayer;
     }
 
-    function endGame(winnerSymbol) {
-        const message = winnerSymbol === this.userPlayer.sign ? 'You won!' : 'You lost!';
-        console.log(message);
-    }
-
-    function checkCell(index) {
-        if (this.board[index] === null) {
-            return true;
+    function endGame() {
+        const winnerSymbol = this.checkWinner();
+        let message;
+        if (winnerSymbol !== false) {
+            message = winnerSymbol === this.userPlayer.sign ? 'You won!' : 'You lost!';
         }
-        return false;
+        else{
+            message = 'Draw!';
+        }
+        console.log(message);
     }
 
     return {
@@ -82,20 +85,21 @@ function createGameboard() {
         pcPlayer,
         currentPlayer,
         doMove,
-        tryMove,
         checkWinner,
         swapUser,
+        checkEndGame,
         endGame,
         checkCell
     };
-}
+})();
 
 function createPlayer() {
     const name = 'User';//getUserName() || 'User';
     const sign = 'X';//getUserSign() || 'X';
+    // let i = 0;
     function getPlayerChoice() {
-        // return prompt('Enter a number between 1 and 9:');
         return Math.floor(Math.random() * 9);
+        // return i++;
     }
 
     return ({
@@ -109,8 +113,10 @@ function createPlayer() {
 function createPCPlayer(userPlayer) {
     const name = 'Computer';
     const sign = userPlayer.sign === 'X' ? 'O' : 'X';
+    // let i = 3;
     function getPCChoice() {
         return Math.floor(Math.random() * 9);
+        // return i++
     }
     return {
         name,
@@ -121,7 +127,7 @@ function createPCPlayer(userPlayer) {
 }
 
 
-const gameboard = createGameboard();
+// const gameboard = createGameboard();
 
 
 gameboard.doMove();
@@ -130,11 +136,9 @@ gameboard.doMove();
 gameboard.doMove();
 gameboard.doMove();
 gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
+gameboard.doMove();
 
-// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
-// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
-// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
-// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
-// gameboard.doMove(gameboard.userPlayer.getPlayerChoice());
-// gameboard.doMove(gameboard.pcPlayer.getPCChoice());
+
 console.log(gameboard.board);
