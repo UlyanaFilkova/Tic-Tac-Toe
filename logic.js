@@ -5,6 +5,11 @@ function createGameboard() {
     let currentPlayer; //= userPlayer.sign === 'X' ? userPlayer : pcPlayer;
 
     function doMove(index) {
+        if (index == undefined) {
+            // setTimeout(function () {
+            index = gameboard.pcPlayer.getPCChoice();
+            // }, 200);
+        }
         // let index;
         // // подбираем ячейку, которая еще не занята
         // do {
@@ -15,7 +20,8 @@ function createGameboard() {
         // while (this.checkCell(index) === false);
 
         board[index] = this.currentPlayer.sign;
-
+        cells[index].textContent = gameboard.currentPlayer.sign;
+        cells[index].classList.add('disabled');
 
 
     }
@@ -58,17 +64,7 @@ function createGameboard() {
         this.currentPlayer = this.currentPlayer === this.userPlayer ? this.pcPlayer : this.userPlayer;
     }
 
-    function endGame() {
-        const winnerSymbol = this.checkWinner();
-        let message;
-        if (winnerSymbol !== false) {
-            message = winnerSymbol === this.userPlayer.sign ? 'You won!' : 'You lost!';
-        }
-        else {
-            message = 'Draw!';
-        }
-        console.log(message);
-    }
+
 
     return {
         board,
@@ -79,7 +75,7 @@ function createGameboard() {
         checkWinner,
         swapUser,
         checkEndGame,
-        endGame,
+
         checkCell
     };
 }
@@ -107,7 +103,12 @@ function createPCPlayer(userPlayer) {
     const sign = userPlayer.sign === 'X' ? 'O' : 'X';
 
     function getPCChoice() {
-        return Math.floor(Math.random() * 9);
+        let index;
+        do {
+            index = Math.floor(Math.random() * 9);
+        }
+        while (gameboard.checkCell(index) === false);
+        return index;
     }
     return {
         name,

@@ -19,6 +19,7 @@ function startNewGame() {
     const playerName = document.getElementById('playerName').value;
     const playerSign = document.querySelector('input[name="playerSign"]:checked').value;
 
+    document.getElementById('userName').textContent = playerName;
     const userPlayer = createPlayer(playerName, playerSign);
     const pcPlayer = createPCPlayer(userPlayer);
 
@@ -40,10 +41,13 @@ disabledCells.forEach(cell => cell.addEventListener('click', function (event) {
 const cells = Array.from(document.getElementsByClassName('cell'));
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 
-// ход игрока
 function handleCellClick(event) {
     const cell = event.target;
+    if (cell.classList.contains('disabled')) {
+        return;
+    }
     const index = cells.indexOf(cell);
+
     if (gameboard.checkCell(index) === true) {
         gameboard.doMove(index);
         cell.textContent = gameboard.currentPlayer.sign;
@@ -51,10 +55,18 @@ function handleCellClick(event) {
     }
     if (gameboard.checkEndGame() === false) {
         gameboard.swapUser();
-        // ход ПК
+        let pcIndex = gameboard.pcPlayer.getPCChoice();
+        // console.log(pcIndex);
+        gameboard.doMove(pcIndex);
+        cells[pcIndex].textContent = gameboard.pcPlayer.sign;
+        cells[pcIndex].classList.add('disabled');
+        if (gameboard.checkEndGame() === false) {
+            gameboard.swapUser();
+        }
+
     }
-    else {
-        gameboard.endGame();
+    if (gameboard.checkEndGame() === true) {
+        endGame();
     }
 }
 
@@ -62,5 +74,60 @@ function updateBoard() {
     cells.forEach((cell, index) => {
         cell.textContent = gameboard.board[index];
         cell.classList.remove('disabled');
+    });
+    const resultMessage = document.getElementById('resultMessage');
+    resultMessage.textContent = '';
+
+    if (gameboard.currentPlayer === gameboard.pcPlayer) {
+        setTimeout(function () {
+            gameboard.doMove();
+            gameboard.swapUser();
+        }, 200);
+
+        /* setTimeout(function () {
+            let pcIndex = gameboard.pcPlayer.getPCChoice();
+            // console.log(pcIndex);
+            gameboard.doMove(pcIndex);
+            cells[pcIndex].textContent = gameboard.pcPlayer.sign;
+            cells[pcIndex].classList.add('disabled');
+
+            gameboard.swapUser();
+        }, 200);
+        */
+    }
+}
+
+function endGame() {
+    const winnerSymbol = gameboard.checkWinner();
+    let message;
+    let color;
+    switch (winnerSymbol) {
+        case false:
+            {
+                message = 'Draw!';
+                color = 'blue';
+                break;
+            }
+        case gameboard.pcPlayer.sign:
+            {
+                message = 'You lost!'
+                color = 'red';
+                break;
+            }
+        case gameboard.userPlayer.sign:
+            {
+                message = 'You won!'
+                color = 'green';
+                break;
+            }
+    }
+
+    const resultMessage = document.getElementById('resultMessage');
+    resultMessage.textContent = message;
+    resultMessage.style.color = color;
+
+    cells.forEach((cell, index) => {
+        cell.textContent = gameboard.board[index];
+        cell.classList.add('disabled');
     });
 }
