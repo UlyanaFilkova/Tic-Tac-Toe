@@ -6,24 +6,11 @@ function createGameboard() {
 
     function doMove(index) {
         if (index == undefined) {
-            // setTimeout(function () {
             index = gameboard.pcPlayer.getPCChoice();
-            // }, 200);
         }
-        // let index;
-        // // подбираем ячейку, которая еще не занята
-        // do {
-        //     index = (this.currentPlayer === this.userPlayer) ?
-        //         this.userPlayer.getPlayerChoice() :
-        //         this.pcPlayer.getPCChoice();
-        // }
-        // while (this.checkCell(index) === false);
-
         board[index] = this.currentPlayer.sign;
         cells[index].textContent = gameboard.currentPlayer.sign;
         cells[index].classList.add('disabled');
-
-
     }
 
     function checkEndGame() {
@@ -75,7 +62,6 @@ function createGameboard() {
         checkWinner,
         swapUser,
         checkEndGame,
-
         checkCell
     };
 }
@@ -118,15 +104,3 @@ function createPCPlayer(userPlayer) {
 
 }
 
-
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-// gameboard.doMove();
-
-// console.log(gameboard.board);

@@ -48,25 +48,23 @@ function handleCellClick(event) {
     }
     const index = cells.indexOf(cell);
 
+    // ход игрока
     if (gameboard.checkCell(index) === true) {
         gameboard.doMove(index);
         cell.textContent = gameboard.currentPlayer.sign;
         cell.classList.add('disabled');
     }
+    // ход компьютера
     if (gameboard.checkEndGame() === false) {
         gameboard.swapUser();
-        let pcIndex = gameboard.pcPlayer.getPCChoice();
-        // console.log(pcIndex);
-        gameboard.doMove(pcIndex);
-        cells[pcIndex].textContent = gameboard.pcPlayer.sign;
-        cells[pcIndex].classList.add('disabled');
-        if (gameboard.checkEndGame() === false) {
-            gameboard.swapUser();
-        }
-
+        gameboard.doMove();
     }
+    // мб конец игры
     if (gameboard.checkEndGame() === true) {
         endGame();
+    }
+    else {
+        gameboard.swapUser();
     }
 }
 
@@ -83,17 +81,6 @@ function updateBoard() {
             gameboard.doMove();
             gameboard.swapUser();
         }, 200);
-
-        /* setTimeout(function () {
-            let pcIndex = gameboard.pcPlayer.getPCChoice();
-            // console.log(pcIndex);
-            gameboard.doMove(pcIndex);
-            cells[pcIndex].textContent = gameboard.pcPlayer.sign;
-            cells[pcIndex].classList.add('disabled');
-
-            gameboard.swapUser();
-        }, 200);
-        */
     }
 }
 
